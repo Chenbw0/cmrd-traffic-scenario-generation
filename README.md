@@ -119,8 +119,6 @@ If no license file is provided, all rights are reserved until a license is added
 For questions about the repository or manuscript, please contact:
 
 ```text
-Zheng Chen
-Faculty of Transportation Engineering
-Kunming University of Science and Technology
-Email: [add email address]
+Bowen Chen
+Email: cbw@stu.kust.edu.cn
 ```
