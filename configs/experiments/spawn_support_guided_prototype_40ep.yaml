@@ -1,0 +1,89 @@
+_base_: ./spawn_current_scene_minimal_40ep.yaml
+
+spawn:
+  architecture: support_guided_prototype
+  hidden_dim: 128
+  noise_dim: 64
+  num_ar_layers: 3
+  num_ar_heads: 4
+  dropout: 0.1
+  presence_threshold: 0.5
+  plan_radial_bins: 4
+  plan_angular_bins: 8
+  max_speed_mps: 20.0
+
+spawn_prototypes:
+  bank_dir: support_prototypes
+  max_prototypes_per_location: 16
+  records_per_prototype: 20
+  max_agents_for_embedding: 12
+  sampling_temperature: 1.0
+  rerank_topk: 8
+  mixture_enabled: false
+  support_bias_weight: 1.0
+  count_compat_weight: 2.0
+  difficulty_compat_weight: 2.0
+  plan_compat_weight: 0.0
+  plan_summary_compat_weight: 0.0
+  plan_occupancy_compat_weight: 0.0
+  prototype_balance_power: 0.5
+  difficulty_bucketed: true
+  embedding_state_weight: 0.35
+  embedding_plan_weight: 1.0
+  embedding_metric_weight: 1.75
+  embedding_difficulty_weight: 0.5
+  memory_cross_attention_enabled: false
+  structured_adaptation_enabled: true
+  structured_anchor_stride: 2
+  structured_max_map_candidates: 256
+  structured_shift_scale_m: 8.0
+  structured_scene_speed_scale_max_delta: 0.4
+  structured_agent_speed_residual_scale_mps: 2.0
+  hybrid_compiler_enabled: false
+  count_residual_max_delta: 6
+  residual_position_scale_m: 12.0
+  residual_speed_scale_mps: 3.0
+  residual_heading_scale_rad: 0.35
+
+spawn_losses:
+  prototype_weight: 1.0
+  presence_weight: 1.0
+  count_weight: 1.0
+  position_weight: 1.0
+  velocity_weight: 0.3
+  heading_weight: 0.1
+  pair_distance_weight: 0.4
+  soft_conflict_weight: 0.4
+  scene_summary_weight: 0.3
+  prototype_relative_summary_weight: 0.6
+  prototype_relative_summary_feature_weights:
+    mean_speed_norm: 2.0
+    mean_radius_norm: 1.5
+    mean_pair_distance_norm: 1.5
+    min_pairwise_distance_norm: 1.5
+    conflict_ratio: 2.0
+    heading_std: 0.5
+  count_consistency_weight: 0.2
+  plan_summary_weight: 0.7
+  plan_occupancy_weight: 1.0
+  conflict_distance_m: 5.0
+  conflict_temperature_m: 1.0
+
+spawn_eval:
+  split: val
+  num_scenes: null
+
+experiment:
+  name: spawn_support_guided_prototype_40ep
+  type: ablation
+  note: support-guided prototype prior plus prototype-preserving spatial adaptation and kinematic completion
+  prepare:
+    enabled: false
+  train:
+    enabled: true
+    resume: false
+    num_epochs: 40
+  sample:
+    enabled: false
+  analyze:
+    enabled: false

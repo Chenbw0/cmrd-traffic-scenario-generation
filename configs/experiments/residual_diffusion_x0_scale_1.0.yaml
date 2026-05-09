@@ -1,0 +1,34 @@
+_base_: ./main_location_split_rollout_only.yaml
+
+model:
+  residual_diffusion_enabled: true
+
+residual_diffusion:
+  enabled: true
+  target_type: x0
+  normalize_residual: true
+  residual_scale: 1.0
+  residual_clip_std: 3.0
+  sample_steps: 50
+
+diffusion:
+  target_type: x0
+
+sampling:
+  use_residual_diffusion: true
+  sample_steps: 50
+
+losses:
+  residual_diffusion_weight: 1.0
+  realism_mmd_weight: 0.0
+
+training:
+  batch_size: 128
+  num_workers: 14
+  num_epochs: 15
+
+experiment:
+  name: residual_diffusion_x0_scale_1.0
+  type: ablation
+  cache_from: main_location_split
+  note: supervised control-knot backbone with x0 residual diffusion, residual_scale=1.0

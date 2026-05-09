@@ -1,0 +1,19 @@
+_base_: ./residual_diffusion_x0_scale_0.5_long_cosine.yaml
+
+interaction_field:
+  enabled: true
+  target_type: static_summary
+  hidden_dim: 128
+  condition_residual_diffusion: true
+
+losses:
+  interaction_field_weight: 1.0
+
+interaction_oracle:
+  mode: none
+
+experiment:
+  name: learned_static_interaction_field
+  type: ablation
+  cache_from: main_location_split
+  note: deployable learned static interaction field conditioned on current snapshot only

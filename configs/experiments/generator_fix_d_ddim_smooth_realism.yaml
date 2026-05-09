@@ -1,0 +1,26 @@
+_base_: ./main_location_split.yaml
+
+losses:
+  smoothness_type: control_delta
+  smoothness_weight: 0.03
+  realism_mmd_weight: 0.02
+  sample_path_loss_enabled: false
+  sample_path_loss_weight: 0.0
+
+sampling:
+  sampler: ddim
+  ddim_eta: 0.0
+  sample_steps: 100
+
+experiment:
+  name: generator_fix_d_ddim_smooth_realism
+  type: ablation
+  cache_from: main_location_split
+  train:
+    enabled: true
+    resume: false
+    num_epochs: 10
+  sample:
+    enabled: true
+    num_slices: 16
+    num_rollouts_per_slice: 1

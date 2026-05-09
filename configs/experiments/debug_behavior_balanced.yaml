@@ -1,0 +1,25 @@
+_base_: ../default.yaml
+
+experiment:
+  name: debug_behavior_balanced
+  type: debug_behavior_balanced
+  note: no paper conclusion; fast plumbing only
+  prepare:
+    enabled: true
+    force_rebuild: true
+    debug_profile: behavior_balanced
+  train:
+    enabled: true
+    resume: false
+    num_epochs: 3
+    debug_max_batches: 50
+  sample:
+    enabled: true
+    mode: retrieval_augmented_generation
+    target_difficulties: [0.2, 0.4, 0.6, 0.8]
+    num_rollouts_per_slice: 2
+  analyze:
+    enabled: true
+
+sampling:
+  num_samples_per_difficulty: 16

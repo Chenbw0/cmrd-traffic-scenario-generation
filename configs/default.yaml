@@ -1,0 +1,289 @@
+data:
+  root: data
+  cache_dir: outputs/cache
+  history_frames: 10
+  future_frames: 30
+  timestep_sec: 0.1
+  max_agents: 32
+  max_map_polylines: 128
+  max_polyline_points: 20
+  map_radius_m: 80.0
+  split_by: location
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  history_mode: history_dropout
+  recent_history_frames: 5
+  history_dropout_prob: 0.5
+  local_coordinates: true
+  slice_stride: 2
+  min_focal_speed_mps: 0.0
+  focal_agent_stride: 1
+  max_focal_agents_per_frame: 0
+  focal_agent_types: []
+  reuse_cache_if_available: false
+  preprocess_num_workers: auto
+  cache_shard_size: 25000
+  keep_cache_debug_features: false
+  max_background_agents_for_proxy: 16
+  selection_weights:
+    distance: 0.35
+    relative_speed: 0.15
+    ttc: 0.2
+    future_min_distance: 0.2
+  focal_conflict: 0.25
+  global_conflict_involvement: 0.15
+  train_subsample:
+    enabled: false
+    strategy: difficulty_behavior_balanced
+    max_train_slices: null
+    slices_per_bin_per_location: null
+
+slice_builder:
+  mode: scene_centric
+  slice_stride_frames: 5
+  max_focals_per_timestamp: 1
+  focal_selection: most_interactive
+  max_slices_per_file: null
+  min_future_valid_ratio: 0.8
+  min_history_valid_ratio: 0.3
+
+map:
+  crop_cache_grid_m: 5.0
+  save_map_polyline_indices_only: true
+
+difficulty:
+  continuous: true
+  level_names: [low, mid, high]
+  quantiles: [0.333, 0.667]
+  normalization: empirical_cdf
+  metric_weights:
+    min_pairwise_distance_future: 1.0
+    ttc_proxy: 1.0
+    conflict_count: 1.0
+    interaction_density: 0.6
+    required_deceleration_proxy: 1.0
+    relative_speed_max: 0.4
+    mean_abs_accel: 0.3
+    mean_abs_yaw_rate: 0.2
+    curvature: 0.2
+  ttc_max_sec: 8.0
+  interaction_radius_m: 30.0
+  conflict_distance_m: 5.0
+  soft_cdf_temperature: 0.002
+  soft_component_temperature: 2.0
+  softmin_temperature_m: 0.1
+  soft_ttc_temperature_sec: 0.1
+  soft_conflict_temperature_m: 0.05
+  soft_density_temperature_m: 0.25
+  soft_topk_temperature: 0.1
+  z_score_cap: 4.0
+
+retrieval:
+  top_k: 64
+  sample_temperature: 0.2
+  support_bandwidth: 0.15
+  diversity_weight: 0.2
+  difficulty_weight: 1.0
+  support_weight: 1.0
+  full_scene_difficulty_weight: 1.0
+  full_scene_support_weight: 1.0
+  selected_agents_gap_weight: 0.3
+  selected_agents_support_weight: 0.5
+  coverage_weight: 0.4
+  min_support_for_main_eval: 0.3
+  knn_neighbors: 16
+
+model:
+  hidden_dim: 128
+  map_hidden_dim: 128
+  num_heads: 4
+  num_agent_layers: 2
+  num_map_layers: 2
+  num_graph_layers: 3
+  num_temporal_layers: 3
+  dropout: 0.1
+  decoder_type: kinematic_controls
+  control_representation: knots
+  num_control_knots: 6
+  control_interpolation: linear
+  use_anchor_latent: false
+  anchor_dim: 6
+  residual_diffusion_enabled: true
+  control_dim: 2
+  accel_scale_mps2: 4.0
+  yaw_rate_scale_radps: 1.5
+  max_speed_mps: 20.0
+  min_speed_mps: 0.0
+  control_soft_clamp: true
+  use_control_normalizer: true
+  control_clamp_mode: quantile
+  control_clamp_quantile: 0.995
+  control_clamp_margin: 1.25
+  control_squash: false
+  future_state_dim: 5
+  local_future_dim: 5
+
+behavior:
+  target_score_key: behavior_quantile_score_selected_agents
+  generator_condition_score_key: behavior_quantile_score_selected_agents
+  generated_score_space: quantile
+  report_additional_behavior_spaces: true
+  quantiles: [0.333, 0.667]
+  score_temperature: 1.0
+  soft_cdf_temperature: 0.01
+  soft_component_temperature: 2.0
+  z_score_cap: 4.0
+  hard_accel_threshold_mps2: 2.0
+  hard_brake_threshold_mps2: 2.0
+  hard_yaw_rate_threshold_radps: 0.3
+  metric_weights:
+    mean_abs_accel: 1.0
+    p95_abs_accel: 0.8
+    mean_abs_jerk: 0.6
+    mean_abs_yaw_rate: 0.9
+    speed_gain: 0.4
+    final_displacement: 0.3
+    mean_speed: 0.4
+    max_speed: 0.4
+    hard_accel_rate: 0.8
+    hard_brake_rate: 0.8
+    hard_yaw_rate_rate: 0.8
+
+generator_input:
+  use_history: false
+  history_mode: current_only
+  require_history_at_sample: false
+
+generator_condition:
+  mode: none
+
+diffusion:
+  num_steps: 100
+  beta_start: 0.0001
+  beta_end: 0.02
+  condition_dropout_prob: 0.15
+  target_type: x0
+  min_snr_gamma: 5.0
+  timestep_sampling: uniform_low_bias
+
+residual_diffusion:
+  enabled: true
+  target_type: x0
+  normalize_residual: true
+  residual_scale: 0.5
+  residual_clip_std: 3.0
+  sample_steps: 50
+
+anchor_residual_diffusion:
+  enabled: false
+  target_type: x0
+  normalize_residual: true
+  residual_scale: 0.5
+  residual_clip_std: 3.0
+  sample_steps: 50
+
+interaction_oracle:
+  mode: none
+  feature_dim: auto
+  num_trace_points: 5
+  conflict_distance_m: 5.0
+  conflict_temperature_m: 1.0
+
+interaction_field:
+  enabled: false
+  target_type: static_summary
+  hidden_dim: 128
+  latent_dim: 128
+  num_message_passing_steps: 2
+  condition_residual_diffusion: true
+
+sampling:
+  sampler: ddpm
+  ddim_eta: 0.0
+  sample_steps: 100
+  guidance_scale: 1.0
+  use_residual_diffusion: true
+  use_anchor_residual_diffusion: false
+  target_difficulties: [0.1, 0.3, 0.5, 0.7, 0.9]
+  num_samples_per_difficulty: 128
+  behavior_calibration_enabled: false
+  behavior_calibration_method: linear
+  behavior_calibration_file: outputs/cache/behavior_calibrator.json
+
+processing:
+  profile: main_retrieval_generation
+  build_same_scene_groups: false
+  build_target_sweep_index: false
+  build_counterfactual_triplets: false
+  include_same_scene_diagnostic_cache: false
+  compute_pair_difficulty_training_debug: false
+  include_background_future_for_proxy: true
+  force_diagnostic_full_cache: false
+  num_build_workers: auto
+  build_worker_chunksize: 1
+  reuse_slice_shards: true
+  shard_cache_dir: outputs/cache/slice_shards
+  strict_cached_features_for_scoring: true
+  cache_format: dict_list
+
+losses:
+  interaction_field_weight: 0.0
+  interaction_field_feature_weights: [2.0, 0.5, 0.5, 0.5, 0.5, 1.5, 2.0, 2.0]
+  anchor_weight: 1.0
+  residual_diffusion_weight: 1.0
+  anchor_residual_diffusion_weight: 1.0
+  supervised_control_weight: 1.0
+  supervised_rollout_weight: 1.0
+  control_delta_weight: 0.05
+  position_weight: 1.0
+  velocity_weight: 0.3
+  heading_weight: 0.1
+  final_anchor_weight: 2.0
+  behavior_control_weight: 0.0
+  control_delta_jerk_weight: 1.0
+  control_delta_yaw_accel_weight: 0.5
+  control_magnitude_guardrail_weight: 0.0
+  realism_mmd_weight: 0.02
+  behavior_low_noise_only: false
+  behavior_max_timestep_ratio: 0.3
+  behavior_timestep_alpha: 0.0
+
+training:
+  batch_size: 128
+  num_epochs: 50
+  lr: 0.0003
+  weight_decay: 0.0001
+  allow_tf32: true
+  cudnn_benchmark: true
+  float32_matmul_precision: high
+  dataloader_prefetch_factor: 4
+  dataloader_pin_memory_device: auto
+  amp:
+    enabled: true
+    dtype: bf16
+  scheduler:
+    type: none
+    min_lr_ratio: 0.1
+  num_workers: 14
+  seed: 42
+  overfit_one_batch: false
+  grad_clip_norm: 5.0
+  record_step_history: true
+  step_history_flush_every: 50
+  device: auto
+  resume: false
+
+analysis:
+  c2st_enabled: true
+  prdc_enabled: true
+  num_visualizations: 64
+  support_bins: [0.0, 0.3, 0.6, 1.0]
+
+outputs:
+  root: outputs
+  checkpoints_dir: outputs/checkpoints
+  logs_dir: outputs/logs
+  samples_dir: outputs/samples
+  analysis_dir: outputs/analysis
+  experiments_dir: outputs/experiments

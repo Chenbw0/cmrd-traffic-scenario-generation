@@ -1,0 +1,47 @@
+_base_: ./current_best_interaction_rollout_40ep.yaml
+
+spawn:
+  architecture: interaction_autoregressive
+  hidden_dim: 128
+  noise_dim: 64
+  num_ar_layers: 3
+  num_ar_heads: 4
+  dropout: 0.1
+  presence_threshold: 0.5
+  plan_radial_bins: 4
+  plan_angular_bins: 8
+  max_speed_mps: 20.0
+
+spawn_losses:
+  presence_weight: 1.0
+  count_weight: 1.0
+  position_weight: 1.0
+  velocity_weight: 0.3
+  heading_weight: 0.1
+  pair_distance_weight: 0.4
+  soft_conflict_weight: 0.4
+  scene_summary_weight: 0.3
+  count_consistency_weight: 0.2
+  plan_summary_weight: 0.7
+  plan_occupancy_weight: 1.0
+  conflict_distance_m: 5.0
+  conflict_temperature_m: 1.0
+
+spawn_eval:
+  split: test
+  num_scenes: null
+
+experiment:
+  name: spawn_current_scene_minimal_40ep
+  type: ablation
+  note: interaction-aware autoregressive spawn conditioned on map and target difficulty with internal scene-plan prediction
+  prepare:
+    enabled: false
+  train:
+    enabled: true
+    resume: false
+    num_epochs: 40
+  sample:
+    enabled: false
+  analyze:
+    enabled: false

@@ -1,0 +1,10 @@
+_base_: ./main_location_split.yaml
+
+experiment:
+  name: ablation_no_behavior_condition
+  type: ablation
+  sample:
+    enabled: true
+    mode: retrieval_unconditional_generation
+    target_difficulties: [0.1, 0.3, 0.5, 0.7, 0.9]
+    num_rollouts_per_slice: 3

@@ -1,0 +1,33 @@
+_base_: ./main_location_split.yaml
+
+generator_condition:
+  mode: none
+
+model:
+  control_representation: knots
+  num_control_knots: 6
+  control_interpolation: linear
+  residual_diffusion_enabled: true
+
+diffusion:
+  target_type: x0
+  min_snr_gamma: 5.0
+  timestep_sampling: uniform_low_bias
+
+sampling:
+  use_residual_diffusion: true
+
+losses:
+  behavior_control_weight: 0.0
+  residual_diffusion_weight: 1.0
+  supervised_control_weight: 1.0
+  supervised_rollout_weight: 1.0
+  control_delta_weight: 0.05
+  realism_mmd_weight: 0.0
+
+experiment:
+  name: main_location_split_rollout_only
+  type: main_location_split_rollout_only
+  cache_from: main_location_split
+  metrics_file_name: rollout_only_metrics.json
+  note: rollout-only main experiment; retrieval uses difficulty, generator uses retrieved current snapshot plus map only

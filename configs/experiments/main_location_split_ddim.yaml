@@ -1,0 +1,11 @@
+_base_: ./main_location_split.yaml
+
+sampling:
+  sampler: ddim
+  ddim_eta: 0.0
+  sample_steps: 100
+
+experiment:
+  name: main_location_split_ddim
+  type: ablation
+  note: current-only retrieval-augmented generation with DDIM sampler

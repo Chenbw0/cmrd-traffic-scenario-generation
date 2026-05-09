@@ -1,0 +1,25 @@
+_base_: ./main_location_split_rollout_only.yaml
+
+model:
+  residual_diffusion_enabled: true
+
+diffusion:
+  target_type: epsilon
+
+sampling:
+  use_residual_diffusion: true
+
+losses:
+  residual_diffusion_weight: 1.0
+  realism_mmd_weight: 0.0
+
+training:
+  batch_size: 128
+  num_workers: 14
+  num_epochs: 15
+
+experiment:
+  name: residual_diffusion_epsilon
+  type: ablation
+  cache_from: main_location_split
+  note: supervised control-knot backbone with epsilon residual diffusion

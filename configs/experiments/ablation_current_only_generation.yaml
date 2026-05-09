@@ -1,0 +1,10 @@
+_base_: ./main_location_split.yaml
+
+experiment:
+  name: ablation_current_only_generation
+  type: ablation
+
+generator_input:
+  use_history: false
+  history_mode: current_only
+  require_history_at_sample: false

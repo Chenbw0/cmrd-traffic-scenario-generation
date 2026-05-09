@@ -1,0 +1,6 @@
+_base_: ./main_location_split_rollout_only.yaml
+
+experiment:
+  name: generator_condition_none
+  type: ablation
+  note: ablation for unconditional rollout-only generator

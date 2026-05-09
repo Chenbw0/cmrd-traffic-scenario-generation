@@ -1,0 +1,14 @@
+_base_: ./residual_diffusion_x0_scale_0.5.yaml
+
+training:
+  num_epochs: 150
+  lr: 0.0006
+  scheduler:
+    type: cosine
+    min_lr_ratio: 0.1
+
+experiment:
+  name: residual_diffusion_x0_scale_0.5_long_cosine
+  type: ablation
+  cache_from: main_location_split
+  note: long-run residual x0 scale 0.5 with cosine lr decay and higher initial lr

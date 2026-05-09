@@ -1,0 +1,17 @@
+_base_: ./spawn_support_guided_prototype_40ep.yaml
+
+spawn_prototypes:
+  structured_adaptation_enabled: false
+  hybrid_compiler_enabled: false
+
+training:
+  num_epochs: 100
+
+experiment:
+  name: spawn_support_guided_prototype_100ep_v8_baseline
+  type: ablation
+  note: v8-style support-guided prototype baseline with single-prototype learned refinement, 100 epoch run
+  train:
+    enabled: true
+    resume: false
+    num_epochs: 100

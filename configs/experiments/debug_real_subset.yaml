@@ -1,0 +1,31 @@
+_base_: ./main_location_split.yaml
+
+experiment:
+  name: debug_real_subset
+  type: debug_real_subset
+  note: small real-data subset for retrieval-augmented debugging only; no paper conclusion
+  prepare:
+    enabled: true
+    force_rebuild: true
+    debug_max_cases: 20
+    debug_profile: full
+  train:
+    enabled: true
+    resume: false
+    num_epochs: 5
+    debug_max_batches: 100
+  sample:
+    enabled: true
+    mode: retrieval_augmented_generation
+    target_difficulties: [0.2, 0.4, 0.6, 0.8]
+    num_slices: 32
+    num_rollouts_per_slice: 2
+  analyze:
+    enabled: true
+
+training:
+  batch_size: 32
+  num_workers: 8
+
+sampling:
+  num_samples_per_difficulty: 24

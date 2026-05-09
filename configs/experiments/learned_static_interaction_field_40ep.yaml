@@ -1,0 +1,10 @@
+_base_: ./learned_static_interaction_field.yaml
+
+training:
+  num_epochs: 40
+
+experiment:
+  name: learned_static_interaction_field_40ep
+  type: ablation
+  cache_from: main_location_split
+  note: 40-epoch deployable learned static interaction field for like-for-like comparison with oracle upper-bound runs

@@ -1,0 +1,19 @@
+_base_: ./learned_static_interaction_field_40ep.yaml
+
+interaction_field:
+  enabled: true
+  target_type: static_summary
+  hidden_dim: 128
+  latent_dim: 128
+  num_message_passing_steps: 2
+  condition_residual_diffusion: true
+
+losses:
+  interaction_field_weight: 1.0
+  interaction_field_feature_weights: [2.0, 0.5, 0.5, 0.5, 0.5, 1.5, 2.0, 2.0]
+
+experiment:
+  name: learned_static_interaction_field_msgpass_40ep
+  type: ablation
+  cache_from: main_location_split
+  note: stronger deployable interaction field with pair latent, weighted supervision, and two-step pair-agent-pair message passing

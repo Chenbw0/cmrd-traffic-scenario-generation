@@ -1,0 +1,11 @@
+_base_: ./spawn_support_guided_prototype_200ep.yaml
+
+spawn_prototypes:
+  residual_position_scale_m: 6.0
+  residual_speed_scale_mps: 1.5
+  residual_heading_scale_rad: 0.15
+
+experiment:
+  name: spawn_support_guided_prototype_200ep_tight_residual
+  type: ablation
+  note: constrains refinement to stay close to support prototype while still allowing limited generation

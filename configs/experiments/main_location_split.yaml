@@ -1,0 +1,64 @@
+_base_: ../default.yaml
+
+data:
+  min_focal_speed_mps: 0.3
+  focal_agent_stride: 2
+  max_focal_agents_per_frame: 8
+  max_agents: 24
+  max_map_polylines: 96
+  reuse_cache_if_available: true
+  preprocess_num_workers: 8
+  cache_shard_size: 20000
+  keep_cache_debug_features: false
+  max_background_agents_for_proxy: 12
+
+slice_builder:
+  mode: scene_centric
+  slice_stride_frames: 5
+  max_focals_per_timestamp: 1
+
+generator_input:
+  use_history: false
+  history_mode: current_only
+  require_history_at_sample: false
+
+generator_condition:
+  mode: behavior_only
+
+processing:
+  num_build_workers: 8
+  reuse_slice_shards: true
+
+training:
+  batch_size: 128
+  num_workers: 14
+  debug_first_batch_only: true
+
+losses:
+  behavior_control_weight: 0.0
+
+sampling:
+  num_samples_per_difficulty: 64
+
+analysis:
+  num_visualizations: 48
+
+experiment:
+  name: main_location_split
+  type: main_location_split
+  note: tuned for 64GB RAM + RTX 4090; reduce slice-library explosion while keeping retrieval diversity
+  prepare:
+    enabled: false
+    force_rebuild: false
+    debug_profile: full
+  train:
+    enabled: true
+    resume: false
+  sample:
+    enabled: true
+    mode: retrieval_augmented_generation
+    target_difficulties: [0.1, 0.3, 0.5, 0.7, 0.9]
+    num_slices: 64
+    num_rollouts_per_slice: 3
+  analyze:
+    enabled: true

@@ -1,0 +1,30 @@
+_base_: ./main_location_split_rollout_only.yaml
+
+model:
+  residual_diffusion_enabled: false
+
+residual_diffusion:
+  enabled: false
+  target_type: x0
+  normalize_residual: true
+  residual_scale: 0.0
+  residual_clip_std: 3.0
+  sample_steps: 50
+
+sampling:
+  use_residual_diffusion: false
+
+losses:
+  residual_diffusion_weight: 0.0
+  realism_mmd_weight: 0.0
+
+training:
+  batch_size: 128
+  num_workers: 14
+  num_epochs: 15
+
+experiment:
+  name: deterministic_control_knot_backbone
+  type: ablation
+  cache_from: main_location_split
+  note: deterministic supervised control-knot rollout baseline without residual diffusion

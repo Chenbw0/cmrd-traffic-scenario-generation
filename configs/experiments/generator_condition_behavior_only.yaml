@@ -1,0 +1,10 @@
+_base_: ./main_location_split.yaml
+
+generator_condition:
+  mode: behavior_only
+
+experiment:
+  name: generator_condition_behavior_only
+  type: ablation
+  cache_from: main_location_split
+  note: ablation for behavior-conditioned rollout generator

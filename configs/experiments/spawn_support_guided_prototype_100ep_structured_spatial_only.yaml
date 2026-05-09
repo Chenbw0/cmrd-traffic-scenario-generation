@@ -1,0 +1,32 @@
+_base_: ./spawn_support_guided_prototype_100ep_structured.yaml
+
+spawn_prototypes:
+  structured_shift_scale_m: 5.0
+  structured_scene_speed_scale_max_delta: 0.0
+  structured_agent_speed_residual_scale_mps: 0.0
+  structured_pair_relaxation_enabled: true
+  structured_pair_relaxation_iterations: 2
+  structured_pair_relaxation_min_spacing_m: 4.0
+  structured_pair_relaxation_strength: 0.75
+  structured_pair_relaxation_max_step_m: 2.0
+  structured_spacing_selection_enabled: true
+  structured_spacing_selection_min_spacing_m: 4.0
+  structured_spacing_selection_fallback_spacing_m: 2.0
+  structured_spacing_selection_final_fill_spacing_m: 1.2
+  structured_spacing_selection_fill_to_count: true
+
+spawn_losses:
+  nearest_pair_distance_weight: 0.6
+  excess_conflict_weight: 0.5
+  min_pair_distance_floor_weight: 0.4
+  min_pair_distance_floor_m: 4.0
+  prototype_pair_preservation_weight: 0.25
+  prototype_pair_compression_weight: 0.75
+  prototype_pair_compression_margin_m: 0.75
+  map_alignment_weight: 0.05
+  map_alignment_margin_m: 4.0
+
+experiment:
+  name: spawn_support_guided_prototype_100ep_structured_spatial_only
+  type: ablation
+  note: structured spatial-only prototype adaptation with prototype-carried kinematics and pair-structure preservation, 100 epoch run

@@ -1,0 +1,32 @@
+_base_: ./main_location_split.yaml
+
+losses:
+  smoothness_type: control_delta
+  smoothness_weight: 0.03
+  realism_mmd_weight: 0.02
+  sample_path_loss_enabled: true
+  sample_path_loss_weight: 0.2
+  sample_path_steps: 8
+  sample_path_every_n_batches: 1
+  sample_path_batch_fraction: 0.5
+
+sampling:
+  sampler: ddim
+  ddim_eta: 0.0
+  sample_steps: 100
+
+training:
+  num_epochs: 15
+
+experiment:
+  name: generator_fix_e2_sample_path_weight02_every1
+  type: ablation
+  cache_from: main_location_split
+  train:
+    enabled: true
+    resume: false
+    num_epochs: 15
+  sample:
+    enabled: true
+    num_slices: 16
+    num_rollouts_per_slice: 1

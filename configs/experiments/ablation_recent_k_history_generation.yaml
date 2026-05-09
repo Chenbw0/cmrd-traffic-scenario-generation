@@ -1,0 +1,10 @@
+_base_: ./main_location_split.yaml
+
+experiment:
+  name: ablation_recent_k_history_generation
+  type: ablation
+
+generator_input:
+  use_history: true
+  history_mode: recent_k
+  require_history_at_sample: true

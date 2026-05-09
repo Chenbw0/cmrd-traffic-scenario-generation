@@ -1,0 +1,16 @@
+_base_: ./residual_diffusion_x0_scale_0.5_long_cosine.yaml
+
+interaction_oracle:
+  mode: teacher_forced_neighbors
+  conflict_distance_m: 5.0
+  conflict_temperature_m: 1.0
+
+experiment:
+  name: teacher_forced_neighbor_oracle
+  type: ablation
+  cache_from: main_location_split
+  note: training-only teacher-forced neighbor oracle upper-bound
+  sample:
+    enabled: false
+  analyze:
+    enabled: false
